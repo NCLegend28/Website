@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  * {
+    @apply border-slate-800;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply max-w-7xl mx-auto px-6 py-20 md:py-32;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-biotech-blue via-tech-purple to-neural-orange bg-clip-text text-transparent;
+  }
+
+  .card-glow {
+    @apply bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6
+           hover:border-biotech-blue/50 hover:shadow-lg hover:shadow-biotech-blue/10
+           transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-biotech-blue to-tech-purple text-white px-6 py-3 rounded-lg
+           font-medium hover:shadow-lg hover:shadow-biotech-blue/50 transition-all duration-300
+           hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply border border-biotech-blue text-biotech-blue px-6 py-3 rounded-lg font-medium
+           hover:bg-biotech-blue/10 transition-all duration-300;
+  }
+
+  /* Circuit background scroll animation */
+  .circuit-animate {
+    animation: circuit-scroll 45s linear infinite;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 10px rgba(14, 165, 233, 0.5);
+  }
+}
+
+@keyframes circuit-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

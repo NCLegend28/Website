@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/$USER/tali-portfolio
+    - /usr/local/bin/npm ci --production=false
+    - /usr/local/bin/npm run build
