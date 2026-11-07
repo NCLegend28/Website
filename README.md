@@ -25,6 +25,15 @@ A modern, interactive portfolio website showcasing projects, experience, and tec
 
 ---
 
+## 🧭 Apps showroom & AI guide
+
+- `/apps`, `/apps/picplace`, `/apps/picplace/privacy`, `/apps/picplace/support` are driven by the validated catalog in `src/data/apps.js`.
+- The home page host is an AI guide: offline quick topics plus the existing `/api/chat` for free-text questions.
+- `npm test` runs unit tests and a production-server test (build first).
+- Launch checklist, App Store Connect URLs, files to edit and deploy checks: **[docs/apps-launch-handoff.md](docs/apps-launch-handoff.md)**.
+
+---
+
 ## 🎨 Tech Stack
 
 - **Frontend**: React 19

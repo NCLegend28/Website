@@ -38,3 +38,6 @@ coverage/
 *.temp
 dev-server.log
 dev-server.pid
+
+# macOS AppleDouble sidecars from the external drive
+._*

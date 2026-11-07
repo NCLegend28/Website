@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
+/* macOS AppleDouble sidecars on the external drive are not source files. */
+@source not "../**/._*";
 
 @layer base {
   * {
@@ -14,6 +16,28 @@
   html {
     scroll-behavior: smooth;
   }
+
+  :focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 2px;
+  }
+
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer components {
@@ -22,7 +46,7 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-biotech-blue via-tech-purple to-neural-orange bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-biotech-blue to-tech-purple bg-clip-text text-transparent;
   }
 
   .card-glow {
@@ -34,7 +58,7 @@
   .btn-primary {
     @apply bg-gradient-to-r from-biotech-blue to-tech-purple text-white px-6 py-3 rounded-lg
            font-medium hover:shadow-lg hover:shadow-biotech-blue/50 transition-all duration-300
-           hover:scale-105;
+           motion-safe:hover:scale-105;
   }
 
   .btn-secondary {
@@ -42,11 +66,87 @@
            hover:bg-biotech-blue/10 transition-all duration-300;
   }
 
-  /* Circuit background scroll animation */
-  .circuit-animate {
-    animation: circuit-scroll 45s linear infinite;
+  /* Plain labeled buttons for policy/support links on product pages. */
+  .btn-quiet {
+    @apply inline-flex items-center rounded-lg border border-slate-600 bg-slate-900 px-4 py-2.5
+           text-sm font-semibold text-slate-100 hover:border-sky-400 hover:text-white transition-colors;
+  }
+
+  /* Calm reading layout for privacy policies and support pages. */
+  .doc-body {
+    @apply text-base leading-7 text-slate-300;
+  }
+  .doc-body > * + *,
+  .doc-body section > * + * {
+    @apply mt-4;
+  }
+  .doc-body section {
+    @apply mt-10;
+  }
+  .doc-body h2 {
+    @apply text-2xl font-semibold text-white;
+  }
+  .doc-body h3 {
+    @apply text-lg font-semibold text-white;
+  }
+  .doc-body a {
+    @apply text-sky-300 underline decoration-sky-400/50 underline-offset-2 hover:text-white;
+  }
+  .doc-body ul {
+    @apply list-disc pl-6 space-y-2;
+  }
+  .doc-body ol {
+    @apply list-decimal pl-6 space-y-2;
+  }
+
+  /* Circuit background scroll animation (only when motion is welcome) */
+  @media (prefers-reduced-motion: no-preference) {
+    .circuit-animate {
+      animation: circuit-scroll 45s linear infinite;
+    }
   }
 }
+
+/* ---------------------------------------------------------------------------
+   AI guide illustration states: idle | listening | thinking | speaking
+   Static appearance per state always applies; motion only without reduced motion.
+   --------------------------------------------------------------------------- */
+.guide-svg .guide-head,
+.guide-svg .guide-eyes,
+.guide-svg .guide-mouth-open,
+.guide-svg .guide-body,
+.guide-svg .guide-mic {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.guide-svg .guide-head { transform-origin: 50% 85%; transition: transform 400ms ease; }
+.guide-svg .guide-mouth-open { opacity: 0; }
+.guide-svg .guide-thinking { opacity: 0; }
+.guide-svg .guide-mic { opacity: 0.55; }
+
+.guide-avatar[data-state='listening'] .guide-head,
+.guide-avatar[data-state='thinking'] .guide-head { transform: rotate(-4deg); }
+.guide-avatar[data-state='listening'] .guide-mic,
+.guide-avatar[data-state='speaking'] .guide-mic { opacity: 1; }
+.guide-avatar[data-state='thinking'] .guide-thinking { opacity: 1; }
+.guide-avatar[data-state='speaking'] .guide-mouth-open { opacity: 1; }
+.guide-avatar[data-state='speaking'] .guide-mouth-rest { opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .guide-svg .guide-body { animation: guide-breathe 5s ease-in-out infinite; }
+  .guide-svg .guide-eyes { animation: guide-blink 6s infinite; }
+  .guide-avatar[data-state='listening'] .guide-mic { animation: guide-pulse 1.4s ease-in-out infinite; }
+  .guide-avatar[data-state='speaking'] .guide-mouth-open { animation: guide-talk 0.32s ease-in-out infinite alternate; }
+  .guide-avatar[data-state='thinking'] .guide-thinking circle { animation: guide-dot 1.2s ease-in-out infinite; }
+  .guide-avatar[data-state='thinking'] .guide-thinking circle:nth-child(2) { animation-delay: 0.2s; }
+  .guide-avatar[data-state='thinking'] .guide-thinking circle:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@keyframes guide-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+@keyframes guide-blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+@keyframes guide-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+@keyframes guide-talk { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+@keyframes guide-dot { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
 
 @layer utilities {
   .text-shadow {

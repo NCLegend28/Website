@@ -1,68 +1,40 @@
+import { Link } from '../lib/router.jsx'
+import Guide from './guide/Guide.jsx'
+
 const Hero = () => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 bg-biotech-blue/10 rounded-full blur-3xl top-20 -left-48 animate-pulse-slow"></div>
-        <div className="absolute w-96 h-96 bg-tech-purple/10 rounded-full blur-3xl bottom-20 -right-48 animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
-      </div>
+    <section id="home" aria-labelledby="home-title" className="relative pt-28 pb-16 md:pt-32 md:pb-24">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-start gap-12 px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:gap-16">
+        {/* Introduction */}
+        <div className="lg:pt-10">
+          <p className="font-mono text-sm text-sky-300">
+            <span aria-hidden="true">// </span>the workshop
+          </p>
+          <h1 id="home-title" data-page-heading tabIndex={-1} className="mt-4 text-5xl font-bold tracking-tight text-white md:text-7xl focus:outline-none">
+            Hi, I’m <span className="gradient-text">Tali</span>
+          </h1>
+          <p className="mt-4 text-xl text-slate-300 md:text-2xl">Biomedical Engineer → AI/ML Developer</p>
 
-      {/* Content */}
-      <div className="section-container relative z-10 text-center">
-        <div className="space-y-8">
-          {/* Main Title */}
-          <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-bold">
-              Hi, I'm <span className="gradient-text">Tali</span>
-            </h1>
-            <p className="text-xl md:text-3xl text-slate-400">
-              Biomedical Engineer → AI/ML Developer
-            </p>
-          </div>
-
-          {/* Tagline */}
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
             Building the future at the intersection of{' '}
-            <span className="text-biotech-blue font-semibold">healthcare technology</span>,{' '}
-            <span className="text-tech-purple font-semibold">artificial intelligence</span>, and{' '}
-            <span className="text-neural-orange font-semibold">financial systems</span>
+            <span className="font-semibold text-sky-300">healthcare technology</span>,{' '}
+            <span className="font-semibold text-violet-300">artificial intelligence</span>, and{' '}
+            <span className="font-semibold text-orange-300">financial systems</span>. I also build apps, and PicPlace is
+            the first one in the showroom.
           </p>
 
-          {/* Philosophy Pills */}
-          <div className="flex flex-wrap justify-center gap-4 pt-8">
-            <div className="card-glow inline-block">
-              <p className="text-biotech-blue font-mono">Carpe Diem</p>
-            </div>
-            <div className="card-glow inline-block">
-              <p className="text-tech-purple font-mono">As You Climb, You Must Lift</p>
-            </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link to="/apps" className="btn-primary">Explore my apps</Link>
+            <Link to="/#guide" className="btn-secondary">Ask the AI guide</Link>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap justify-center gap-4 pt-8">
-            <a href="#projects" className="btn-primary">
-              View My Work
-            </a>
-            <a href="#chat" className="btn-secondary">
-              Chat With Me
-            </a>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="pt-16 animate-bounce">
-            <svg
-              className="w-6 h-6 mx-auto text-biotech-blue"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
-          </div>
+          <p className="mt-10 font-mono text-sm text-slate-500">
+            Carpe Diem <span aria-hidden="true" className="px-2 text-slate-700">/</span> As You Climb, You Must Lift
+          </p>
         </div>
+
+        {/* Host area */}
+        <Guide />
       </div>
     </section>
   )

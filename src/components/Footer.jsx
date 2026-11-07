@@ -1,10 +1,21 @@
+import { Link } from '../lib/router.jsx'
+import { SITE } from '../config/site.js'
+
 const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   const socialLinks = [
-    { name: 'GitHub', url: 'https://github.com/NCLegend28', icon: '💻' },
-    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/tali-mosley', icon: '💼' },
-    { name: 'Email', url: 'mailto:mosley.tali@gmail.com', icon: '📧' },
+    { name: 'GitHub', url: SITE.social.github, icon: '💻' },
+    { name: 'LinkedIn', url: SITE.social.linkedin, icon: '💼' },
+    { name: 'Email', url: `mailto:${SITE.contactEmail}`, icon: '📧' },
+  ]
+
+  const quickLinks = [
+    { to: '/apps', label: 'Apps' },
+    { to: '/#about', label: 'About' },
+    { to: '/#projects', label: 'Projects' },
+    { to: '/#experience', label: 'Experience' },
+    { to: '/#guide', label: 'AI guide' },
   ]
 
   return (
@@ -15,7 +26,7 @@ const Footer = () => {
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             {/* Brand */}
             <div>
-              <h3 className="text-2xl font-bold gradient-text mb-4">TALI</h3>
+              <p className="text-2xl font-bold gradient-text mb-4">TALI</p>
               <p className="text-slate-400">
                 Biomedical Engineer & AI/ML Developer building solutions.
               </p>
@@ -23,42 +34,30 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-lg font-semibold text-biotech-blue mb-4">Quick Links</h4>
+              <h2 className="text-lg font-semibold text-biotech-blue mb-4">Quick Links</h2>
               <ul className="space-y-2">
-                <li>
-                  <a href="#about" className="text-slate-400 hover:text-biotech-blue transition-colors">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#projects" className="text-slate-400 hover:text-biotech-blue transition-colors">
-                    Projects
-                  </a>
-                </li>
-                <li>
-                  <a href="#experience" className="text-slate-400 hover:text-biotech-blue transition-colors">
-                    Experience
-                  </a>
-                </li>
-                <li>
-                  <a href="#chat" className="text-slate-400 hover:text-biotech-blue transition-colors">
-                    Chat
-                  </a>
-                </li>
+                {quickLinks.map((link) => (
+                  <li key={link.to}>
+                    <Link to={link.to} className="text-slate-400 hover:text-biotech-blue transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Connect */}
             <div>
-              <h4 className="text-lg font-semibold text-tech-purple mb-4">Connect</h4>
+              <h2 className="text-lg font-semibold text-tech-purple mb-4">Connect</h2>
               <div className="flex flex-col space-y-3">
                 {socialLinks.map((link, index) => (
                   <a
                     key={index}
                     href={link.url}
+                    {...(link.url.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     className="flex items-center gap-2 text-slate-400 hover:text-tech-purple transition-colors"
                   >
-                    <span>{link.icon}</span>
+                    <span aria-hidden="true">{link.icon}</span>
                     <span>{link.name}</span>
                   </a>
                 ))}
