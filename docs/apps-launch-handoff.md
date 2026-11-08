@@ -1,6 +1,6 @@
 # Apps showroom, AI guide and PicPlace: launch handoff
 
-Prepared 2026-11-07. `DOMAIN` below is `https://aferro.net`. I checked that it is the live host for this repo: it returns `x-powered-by: Express`, this site's page title, and this server's exact `/api/chat` validation error, and `http://` redirects to `https://`. If the site moves, change `SITE.url` in `src/config/site.js`. Canonical URLs, the sitemap and the URLs below all come from that one value.
+Prepared 2026-11-07, updated 2026-11-08 (iPhone-only launch, support email, price, screenshots, badge, Xcode rename to PicPlace). `DOMAIN` below is `https://aferro.net`. I checked that it is the live host for this repo: it returns `x-powered-by: Express`, this site's page title, and this server's exact `/api/chat` validation error, and `http://` redirects to `https://`. If the site moves, change `SITE.url` in `src/config/site.js`. Canonical URLs, the sitemap and the URLs below all come from that one value.
 
 ## App Store Connect: route-to-field mapping
 
@@ -10,7 +10,7 @@ Prepared 2026-11-07. `DOMAIN` below is `https://aferro.net`. I checked that it i
 | **Privacy Policy URL** | `/apps/picplace/privacy` | `DOMAIN/apps/picplace/privacy` → https://aferro.net/apps/picplace/privacy |
 | **Support URL** | `/apps/picplace/support` | `DOMAIN/apps/picplace/support` → https://aferro.net/apps/picplace/support |
 
-Use the Privacy Policy URL for the in-app privacy link too. The Swift project was not changed.
+The app links to the Privacy Policy and Support URLs from Home → Quick guide (`PicPlace/QuickGuide.swift`).
 
 **App Privacy label:** the source supports **Data Not Collected**. It has no networking code, no third-party packages, `NSPrivacyTracking = false`, and no collected data types in `PrivacyInfo.xcprivacy`. Keep the label, the manifest and `src/content/apps/picplace.js` consistent if that changes.
 
@@ -21,12 +21,13 @@ Use the Privacy Policy URL for the in-app privacy link too. The Swift project wa
 | Domain | `src/config/site.js` | `SITE.url` |
 | Publisher (name on policy, must match the App Store seller) | `src/config/site.js` | `SITE.publisher.name` |
 | Publisher / site contact email | `src/config/site.js` | `SITE.publisher.email`, `SITE.contactEmail` |
-| App support email | `src/data/apps.js` | `support.email` (defaults to the publisher email) |
+| App support email | `src/data/apps.js` | `support.email` (currently `aferro@aferro.net`) |
 | Release status | `src/data/apps.js` | `status`: `'coming-soon'` → `'live'` |
 | App Store URL | `src/data/apps.js` | `storeUrl` (exact `https://apps.apple.com/…/id<digits>` listing) |
-| App Store badge | `public/media/badges/app-store-badge.svg` | Apple's official badge file (see "Going live") |
-| Price (optional) | `src/data/apps.js` | `pricing` + `confirmed: true` to display |
-| Screenshots | `public/media/apps/picplace/` + `src/data/apps.js` | `artwork.screenshots: [{ src, alt, width, height }]` |
+| App Store badge | `public/media/badges/app-store-badge-white.svg` (black variant beside it) | `APP_STORE_BADGE` in `src/data/apps.js` |
+| Price (optional) | `src/data/apps.js` | `pricing` (confirmed: $0.99 one-time, US) |
+| Screenshots | `public/media/apps/picplace/screens/` + `src/data/apps.js` | `artwork.screenshots: [{ src, alt, width, height }]` |
+| Platform | `src/data/apps.js` | `platform`, `requirements` (currently iPhone, iOS 26 or later) |
 | Policy effective date | `src/content/apps/picplace.js` | `privacy.effectiveDate` |
 | Product, policy and support copy | `src/content/apps/picplace.js` | `privacy`, `support`, `details` |
 | Avatar 3D model | `public/guide/<file>.glb` + `src/config/guide.js` | `modelUrl` (or build with `VITE_GUIDE_MODEL_URL=/guide/<file>.glb`) |
@@ -37,47 +38,49 @@ Use the Privacy Policy URL for the in-app privacy link too. The Swift project wa
 
 ## Going live on the App Store
 
-1. Download Apple's black **Download on the App Store** badge (SVG, US English) from App Store Marketing Tools, linked from https://developer.apple.com/app-store/marketing/guidelines/. Save it as `public/media/badges/app-store-badge.svg`. I couldn't download it from here (the request was blocked), and recreating Apple's artwork isn't allowed.
+1. Apple's badge is in place (`public/media/badges/app-store-badge-white.svg`). Verified rendering on the product page in the live state.
 2. In `src/data/apps.js`, set `storeUrl` to the listing URL from App Store Connect and set `status: 'live'`.
-3. Optional: once the price is final, set `pricing.confirmed: true`. The page then shows "$0.99 one-time purchase (US). Apple shows the price for your region." Until then no price appears anywhere, including AI chat answers.
+3. The price is already confirmed: the page shows "$0.99 one-time purchase (US). Apple shows the price for your region." Set `pricing.confirmed: false` to hide it everywhere, including AI chat answers.
 4. Run `npm run build && npm test` and deploy.
 
-## Screens to capture (none exist yet)
+## Screenshots
 
-The PicPlace repo has no captures, so the product page uses the icon and copy and hides the gallery. Capture these with **sample media only**:
+**Launch is iPhone-only**, so App Store Connect needs only the iPhone 6.9" set; no iPad set is required. The Xcode project is set to iPhone only. Going iPhone-only can be undone later: adding iPad in a future update is allowed, but once an app has shipped with iPad support, an update can't drop it.
 
-1. Home: "Review your library", Albums and Cleanup queue panels.
-2. Reviewing a photo: Keep / Skip / Mark for deletion, with pinned albums visible.
-3. Add to album sheet or Pinned albums.
-4. Old Screenshots with the age filter.
-5. Large Videos with measured sizes.
-6. Review by storage: On this device / In iCloud / Storage unknown.
-7. Final deletion review, before the Photos confirmation.
+| Where | What |
+|---|---|
+| `PhotoCleanup/AppStoreAssets/screenshots/iphone-6.3/` | Seven unedited originals, 1206 × 2622. Keep them as masters. |
+| `PhotoCleanup/AppStoreAssets/screenshots/iphone-6.9/` | All seven at 1320 × 2868 (scaled about 9%, 1 px trimmed top and bottom), RGB PNG, with personal thumbnails blurred in Organize, Old Screenshots and Large Videos. Upload these to the iPhone 6.9" slot. |
+| `Website/public/media/apps/picplace/screens/` | Web copies (600 × 1304 WebP) of all seven, same blurring, shown on the product page in app order. |
 
-For the website, export PNG or WebP about 1290 px wide into `public/media/apps/picplace/` and list each one in `artwork.screenshots` with alt text and pixel size.
+**Blurring.** The originals of Organize, Old Screenshots and Large Videos show personal content (a time-off email, an application essay, photos and faces). In the 6.9" and web copies, each photo and document thumbnail is pixelated and blurred inside its rounded corners, and the selection rings and expand buttons are restored on top, so the app interface stays sharp. The originals in `iphone-6.3/` are untouched; don't upload those.
 
 ## Launch inputs still needed
 
 - [ ] **Publisher legal name.** The policy says "Tali Mosley". If you enrolled in the Apple Developer Program as an organization (e.g. BliqByte), change `SITE.publisher.name` to match the seller name.
-- [ ] **Support/contact email.** Defaults to the footer address `mosley.tali@gmail.com`. Swap in a dedicated support address if you have one.
+- [x] **Support email.** `aferro@aferro.net`. The privacy policy contact line still shows `mosley.tali@gmail.com` from `SITE.publisher.email`; change it there if you want them to match.
 - [ ] **Postal address / phone.** Not on the site. Only needed if you declare yourself a trader in App Store Connect for the EU (DSA). Apple shows those details on the listing, not your site.
 - [ ] **Effective date.** Set to 2026-11-07. Update it if you change the policy before publishing.
-- [ ] **Price.** $0.99 is stored but hidden until `confirmed: true`.
-- [ ] **App Store URL and badge.** See "Going live".
-- [ ] **Screenshots.** See above.
+- [x] **Price.** Confirmed: $0.99 one-time (US).
+- [x] **Badge.** White badge in place.
+- [ ] **App Store URL.** After approval, see "Going live".
+- [x] **Screenshots.** Seven upload-ready iPhone 6.9" screenshots, three with blurred thumbnails; all seven on the site.
+- [x] **Xcode: iPhone only.** Done (`TARGETED_DEVICE_FAMILY = 1`).
+- [x] **Xcode rename.** Project, targets, folders and Swift types renamed PhotoCleanup → PicPlace; bundle ID `apollo.PicPlace` (tests `apollo.PicPlaceTests`, `apollo.PicPlaceUITests`). Pre-rename backup: `PhotoCleanup/.backup-before-picplace-rename.tgz`.
+- [ ] **App ID.** Register `apollo.PicPlace` (Xcode automatic signing, or developer.apple.com → Identifiers) so it appears in App Store Connect's Bundle ID list.
 - [ ] **Website logs.** The policy says the host *may* keep standard request logs. Confirm what your cPanel host retains if you want to be more specific.
 
 ## How the policy claims were verified
 
-Checked against `/Volumes/P7/projects/PhotoCleanup` (read-only):
+Checked against `/Volumes/P7/projects/PhotoCleanup` (Xcode project now `PicPlace.xcodeproj`):
 
 - **No network or SDKs:** no `URLSession` or HTTP calls in any Swift file, and no Swift packages in `project.pbxproj`.
 - **Photos access:** `PHPhotoLibrary.requestAuthorization(for: .readWrite)`. Limited access is handled (`ContentView.swift`). Album features need `.authorized` (`AlbumLibrary.swift`).
-- **Local storage:** `@AppStorage` keys `photoReviewDecisions`, `pinnedPhotoAlbums`, `screenshotAgeInDays`, `includeFavoriteScreenshots`, `swipeToReviewPhotos`, `hasSeenQuickGuide`, `videoMeasurementBatchSize`, `storageReviewBatchSize`. The manifest declares UserDefaults reason `CA92.1`.
+- **Local storage:** UserDefaults keys `photoReviewDecisions`, `pinnedPhotoAlbums`, `screenshotAgeInDays`, `includeFavoriteScreenshots`, `hasCompletedTour`, `videoMeasurementBatchSize`, `storageReviewBatchSize` (updated 2026-11-08: swipe review is always on and the welcome tour replaced the first-run guide). The manifest declares UserDefaults reason `CA92.1`.
 - **iCloud:** storage checks use `isNetworkAccessAllowed = false`. Downloads happen only through "Download to check size", "Load from iCloud", and previews/playback in Old Screenshots, Large Videos and cloud items.
 - **Album changes:** creates albums and adds assets only. There is no `removeAssets` call.
 - **Deletion:** `PHAssetChangeRequest.deleteAssets` after the in-app review. Recently Deleted wording matches the app's own text.
-- **Requirements:** iOS/iPadOS 26.0 deployment target, device family iPhone + iPad, display name PicPlace, bundle `apollo.PhotoCleanup`.
+- **Requirements:** iOS 26.0 deployment target, display name PicPlace, bundle `apollo.PicPlace`, iPhone only (`TARGETED_DEVICE_FAMILY = 1`). The site says "iPhone" and "Requires iOS 26 or later."
 
 ## cPanel deployment (your step)
 
@@ -108,7 +111,7 @@ Then in a browser: open the privacy URL in a private window and refresh; check t
 
 - **In this repo, on the Mac's linked shell:** `npm ci` passed. `vite build` passed: the default config loader hit a file-visibility lag on the P7 drive mount, the same failure your original config hits there, so the build ran with `--configLoader native` on the same `vite.config.js`. `npm test` passed 17/17. That includes starting `server.cjs` against `dist/` without `MOONSHOT_API_KEY` and checking direct navigation, distinct titles and descriptions, canonical URLs, the noscript policy text, 301/404 handling, assets and sitemap, and a clean 503 from chat.
 - **In headless Chrome against the production server** (69/69 checks): direct load and refresh of all five routes; guide absent on app pages; Privacy Policy and Support buttons directly under the main info; client-side navigation, back button, title/description updates, focus moved to the page heading; offline topics with no network requests; disclosure shown before submit; chat failure notice with topics still working afterward; chat success via the same `/api/chat` payload (user/assistant only); no transcript in browser storage; mobile menu (open, Escape returns focus, closes on navigation, no horizontal overflow on any route at 390 px); keyboard tab order and skip link; reading order on the privacy page; reduced motion (no guide or circuit animation, state still shown statically); Listen/Stop narration with a local voice and Listen hidden without one; guide with a test `.glb` (renders in the reserved square, receives state, works with reduced motion), with the model 404ing (falls back), and with WebGL disabled (falls back, three.js never fetched); three.js not loaded when no model is configured; coming-soon state (no badge, no price); live state on a scratch copy (badge links to the listing in a new tab, confirmed price with the local-price note). The live build also refused to compile without the badge file.
-- **Not verified:** a real Moonshot reply (no key here), deployment to cPanel, and Apple's real badge artwork.
+- **Not verified:** a real Moonshot reply (no key here) and deployment to cPanel. Apple's real badge was verified later (2026-11-08).
 
 ## Adding another app
 

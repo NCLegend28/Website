@@ -15,7 +15,7 @@ import * as picplaceCopy from '../content/apps/picplace.js'
 // https://developer.apple.com/app-store/marketing/guidelines/ (App Store Marketing Tools)
 // and saved at public/media/badges/app-store-badge.svg. Required before any app goes live;
 // the build fails if a live app exists and this file is missing.
-export const APP_STORE_BADGE = '/media/badges/app-store-badge.svg'
+export const APP_STORE_BADGE = '/media/badges/app-store-badge-white.svg'
 
 export const APP_STATUSES = {
   'coming-soon': 'Coming to the App Store',
@@ -31,8 +31,8 @@ const RAW_APPS = [
     benefit: 'Review, file, and tidy your photo library, with every deletion staged for your review.',
     description:
       'PicPlace helps you review the photos and videos in your library, file them into albums, pin the albums you use most, find old screenshots, and review large videos. It shows which originals are on your device and which need iCloud, when Photos can tell. Deletions wait in a queue until you confirm them.',
-    platform: 'iPhone and iPad',
-    requirements: 'Requires iOS 26 or iPadOS 26 or later.',
+    platform: 'iPhone',
+    requirements: 'Requires iOS 26 or later.',
     category: 'Photo & Video',
 
     // 'coming-soon' | 'live'. Set to 'live' only together with a verified storeUrl.
@@ -42,7 +42,7 @@ const RAW_APPS = [
     storeUrl: null,
 
     // Optional. Shown only when confirmed: true. Apple shows the real local price.
-    pricing: { model: 'one-time', amount: 0.99, currency: 'USD', region: 'US', confirmed: false },
+    pricing: { model: 'one-time', amount: 0.99, currency: 'USD', region: 'US', confirmed: true },
 
     artwork: {
       icon: {
@@ -51,12 +51,27 @@ const RAW_APPS = [
       },
       // Real captures only. Add { src, alt, width, height } entries after capturing
       // with sample media; the gallery stays hidden while this is empty.
-      screenshots: [],
+      screenshots: [
+        { src: '/media/apps/picplace/screens/home.webp', width: 600, height: 1304,
+          alt: 'PicPlace home screen with Old Screenshots and Large Videos shortcuts, and Photos, Screenshots, and Videos left to review' },
+        { src: '/media/apps/picplace/screens/photo_review.webp', width: 600, height: 1304,
+          alt: 'Reviewing a photo with Keep, Skip, Mark for deletion, Add to album, and three pinned albums' },
+        { src: '/media/apps/picplace/screens/organize.webp', width: 600, height: 1304,
+          alt: 'Organize screen for selecting a batch of photos and videos to file into an album (thumbnails blurred for privacy)' },
+        { src: '/media/apps/picplace/screens/old_screenshots.webp', width: 600, height: 1304,
+          alt: 'Old Screenshots filtered to older than 90 days, with favorites excluded (thumbnails blurred for privacy)' },
+        { src: '/media/apps/picplace/screens/large_videos.webp', width: 600, height: 1304,
+          alt: 'Large Videos listing the longest videos with their local file sizes and lengths (thumbnails blurred for privacy)' },
+        { src: '/media/apps/picplace/screens/review_storage.webp', width: 600, height: 1304,
+          alt: 'Review by storage, grouping items on this device, in iCloud, and with storage unknown' },
+        { src: '/media/apps/picplace/screens/final_review.webp', width: 600, height: 1304,
+          alt: 'Final review of eight items marked for deletion, with an estimate of known local media size' },
+      ],
       accent: '#6a3fc1',
     },
 
     features: [
-      { title: 'Review at your pace', detail: 'Go through Photos, Screenshots, or Videos one item at a time. Keep, skip, or mark for deletion, or turn on swipe to review. Your progress is saved.' },
+      { title: 'Review at your pace', detail: 'Go through Photos, Screenshots, or Videos one item at a time. Swipe right to keep or left to mark for deletion, or use the buttons. Your progress is saved.' },
       { title: 'File into albums', detail: 'Add items to an existing or new Photos album, or pin up to three albums for one-tap filing. Needs Full Photos access.' },
       { title: 'Find old screenshots', detail: 'Show screenshots older than 30, 90, 180, or 365 days. Favorites stay out unless you include them.' },
       { title: 'Review large videos', detail: 'Starts with your longest videos and checks local file sizes in batches, without downloading iCloud originals.' },
@@ -64,7 +79,7 @@ const RAW_APPS = [
       { title: 'Deletions you confirm', detail: 'Marked items wait in a cleanup queue. Confirm in Photos and they move to Recently Deleted, where you can recover them.' },
     ],
 
-    support: { email: SITE.publisher.email },
+    support: { email: 'aferro@aferro.net' },
     copy: picplaceCopy,
   },
 ]

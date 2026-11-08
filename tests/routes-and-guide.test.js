@@ -46,7 +46,9 @@ test('quick topics answer offline with real links and no invented price or date'
       }
     }
     const text = answerToText(a)
-    assert.doesNotMatch(text, /\$\d/, `${topic.id} must not state an unconfirmed price`)
+    if (!getApp('picplace').pricing?.confirmed) {
+      assert.doesNotMatch(text, /\$\d/, `${topic.id} must not state an unconfirmed price`)
+    }
   }
   const pp = guideTopics.find((t) => t.id === 'picplace').answer()
   assert.match(answerToText(pp), /Give every photo a place\./)
@@ -54,14 +56,18 @@ test('quick topics answer offline with real links and no invented price or date'
   assert.ok(pp.links.some((l) => l.href === '/apps/picplace/support'))
 })
 
-test('AI facts come from the catalog and forbid invented prices and dates', () => {
+test('AI facts come from the catalog and only state a confirmed price', () => {
   const facts = buildAiFacts()
   const app = getApp('picplace')
   assert.match(facts, /PicPlace/)
   assert.ok(facts.includes(app.description))
-  assert.match(facts, /Price: not announced/)
   assert.match(facts, /Launch date: not announced/)
-  assert.doesNotMatch(facts, /0\.99/)
+  if (app.pricing?.confirmed) {
+    assert.match(facts, /Price: \$0\.99 one-time purchase in the US; Apple shows the local price\./)
+  } else {
+    assert.match(facts, /Price: not announced/)
+    assert.doesNotMatch(facts, /0\.99/)
+  }
 })
 
 test('inline formatter escapes HTML and only allows safe link schemes', () => {

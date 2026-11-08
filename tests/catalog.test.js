@@ -15,17 +15,25 @@ test('catalog loads and PicPlace is present with the required fields', () => {
   assert.ok(APPS.length >= 1)
 })
 
-test('PicPlace defaults to coming soon with no store link and no unconfirmed price', () => {
-  const s = purchaseState(getApp('picplace'))
-  assert.equal(s.kind, 'coming-soon')
-  assert.equal(s.label, 'Coming to the App Store')
-  assert.equal(s.storeUrl, null)
-  assert.equal(s.price, null, 'unconfirmed price must not be displayed')
+test('PicPlace purchase state follows the catalog (badge only when live, price only when confirmed)', () => {
+  const app = getApp('picplace')
+  const s = purchaseState(app)
+  if (app.status === 'live') {
+    assert.equal(s.kind, 'live')
+    assert.equal(s.storeUrl, app.storeUrl)
+  } else {
+    assert.equal(s.kind, 'coming-soon')
+    assert.equal(s.label, 'Coming to the App Store')
+    assert.equal(s.storeUrl, null)
+  }
+  if (app.pricing?.confirmed) assert.ok(s.price?.text, 'confirmed price is displayed')
+  else assert.equal(s.price, null, 'unconfirmed price must not be displayed')
 })
 
 test('live state requires a real App Store URL and then exposes it', () => {
   const app = picplace()
   app.status = 'live'
+  app.storeUrl = null
   assert.throws(() => validateApp(app), CatalogError, 'live without storeUrl is rejected')
 
   for (const bad of ['https://example.com/app', 'https://apps.apple.com/app/picplace/idXXXX', 'TODO', 'http://apps.apple.com/us/app/picplace/id1234567890']) {
@@ -42,12 +50,14 @@ test('live state requires a real App Store URL and then exposes it', () => {
 
 test('a store URL on a coming-soon app does not show a badge', () => {
   const app = picplace()
+  app.status = 'coming-soon'
   app.storeUrl = 'https://apps.apple.com/us/app/picplace/id1234567890'
   assert.equal(purchaseState(app).kind, 'coming-soon')
 })
 
 test('price shows only when confirmed', () => {
   const app = picplace()
+  app.pricing.confirmed = false
   assert.equal(confirmedPrice(app), null)
   app.pricing.confirmed = true
   assert.deepEqual(confirmedPrice(app), { text: '$0.99 one-time purchase', region: 'US' })

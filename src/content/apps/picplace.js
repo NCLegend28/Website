@@ -16,7 +16,7 @@ export const privacy = {
   // Owner-editable. Change this date whenever the policy text changes.
   effectiveDate: '2026-11-07',
   intro: [
-    `This policy explains how the PicPlace app for iPhone and iPad handles information. PicPlace is published by ${SITE.publisher.name}. Questions go to [${contact}](mailto:${contact}).`,
+    `This policy explains how the PicPlace app for iPhone handles information. PicPlace is published by ${SITE.publisher.name}. Questions go to [${contact}](mailto:${contact}).`,
   ],
   sections: [
     {
@@ -53,7 +53,7 @@ export const privacy = {
         { ul: [
           'review decisions (keep or marked for deletion), linked to the identifiers Photos assigns to items;',
           'the identifiers of up to three pinned albums;',
-          'preferences: screenshot age filter, whether to include favorite screenshots, swipe to review, batch sizes for size checks, and whether you have seen the quick guide.',
+          'preferences: screenshot age filter, whether to include favorite screenshots, batch sizes for size checks, and whether you have completed the welcome tour.',
         ] },
         { p: 'This information is not sent to the publisher. iOS may include it in your device backups, depending on your backup settings. **Reset review progress** in PicPlace clears keep and delete marks without changing Photos. Deleting the app removes this information from the device.' },
       ],
